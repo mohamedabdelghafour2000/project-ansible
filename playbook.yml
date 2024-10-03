@@ -1,0 +1,22 @@
+# playbook.yml
+---
+- name: Simple Apache Setup
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: Install Apache
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+
+    - name: Ensure Apache is running
+      ansible.builtin.systemd:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Copy index.html to web server directory
+      ansible.builtin.copy:
+        src: files/index.html
+        dest: /var/www/html/index.html
+        mode: '0644'
